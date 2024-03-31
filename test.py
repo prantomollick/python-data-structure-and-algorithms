@@ -1,54 +1,53 @@
-import ctypes
+#size of matrix
+M = 3
+N = 3
 
+mat = [[12, 23, 34],
+          [45, 56, 67], 
+          [78, 89, 91]]
+ 
 
-class DynamicArray:
+def rotateMatrix(k):
+    global M, N, mat
     
-    def __init__(self) -> None:
-        self.n = 0; #count of actual element
-        self.capacity = 1
-        self.A = self.make_array(self.capacity)
+    #temporary array of size M
+    temp = [0] * M
+       
+    #with the size of matrix
+    k = k % M
+
+    
+    for i in range(N):
+        
+        #copy first m-k elements to temporary array
+        for t in range(0, M - k):
+            temp[t] = mat[i][t]
+        
+        #copy the elements from k to end to starting
+        for j in range(M-k, M):
+            mat[i][j-M+k] = mat[i][j]
+            
+        #copy ements from temporary array to end
+        for j in range(k, M):
+            mat[i][j] = temp[j-k]
+            
+
+
+def displayMatrix():
+    global M, N, mat
+    for i in range(0, N):
+        for j in range(0, M):
+            print("{} ".format(mat[i][j]), end = "")
+        
+        print()
         
 
-    def __len__(self):
-        """return the number of element store in an array"""
-        return self.n
-    
-    def __getitem__(self, k):
-        """return element at index k"""
-        if not 0 <= k < self.n:
-            raise IndexError('Index out of bounds')
-        return self.A[k]
-    
-    def append(self, ele):
-        """Add element to the end of the array"""
-        if self.n == self.capacity:
-            self._resize(2*self.capacity)
-        self.A[self.n] = ele
-        self.n += 1
 
-        
-    def _resize(self, new_capacity):
-        """Resize the array to a new capacity"""
-        B = self.make_array(new_capacity)
-        for i in range(self.n):
-            B[i] = self.A[i]
-        self.A = B
-        self.capacity = new_capacity
-        
-
-
-    def make_array(self, capacity):
-        """create new raw array with the given capactiy."""
-        return (capacity * ctypes.py_object)()
-
-
-
-
-dyn_array = DynamicArray()
-
-dyn_array.append(10)
-dyn_array.append(20)
-dyn_array.append(30)
-
-print(len(dyn_array))
-print(dyn_array[0])
+# Driver code
+k = 2
+ 
+# rotate matrix by k
+rotateMatrix(k)
+ 
+# display rotated matrix
+displayMatrix()
